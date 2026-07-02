@@ -100,18 +100,34 @@ export default function PronunciationScreen({ onBack }) {
       setWaveBars(Array.from({ length: 18 }, () => Math.floor(4 + Math.random() * 26)))
     }, 110)
     try {
-      const res = await fetch('/api/speak', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text })
-      })
-      if (!res.ok) throw new Error('TTS failed')
-      const blob = await res.blob()
-      const url = URL.createObjectURL(blob)
-      const audio = new Audio(url)
-      audioRef.current = audio
-      audio.onended = () => { setSpeaking(false); clearInterval(waveIntervalRef.current); setWaveBars(Array.from({ length: 18 }, () => 4)); URL.revokeObjectURL(url) }
-      audio.onerror = () => { setSpeaking(false); clearInterval(waveIntervalRef.current) }
-      audio.play()
+      // Try server TTS first, fall back to Web Speech API
+            let usedServer = false
+            try {
+              const res = await fetch('/api/speak', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+              })
+              const contentType = res.headers.get('content-type') || ''
+              if (contentType.includes('audio')) {
+                const blob = await res.blob()
+                const url = URL.createObjectURL(blob)
+                const audio = new Audio(url)
+                audioRef.current = audio
+                audio.onended = () => { stopSpeaking(); URL.revokeObjectURL(url) }
+                audio.onerror = () => stopSpeaking()
+                audio.play()
+                usedServer = true
+              }
+            } catch (e) { usedServer = false }
+            if (!usedServer) {
+              window.speechSynthesis.cancel()
+              const u = new SpeechSynthesisUtterance(text)
+              u.lang = 'en-IN'
+              u.rate = 0.9
+              u.onend = () => setSpeaking(false)
+              window.speechSynthesis.speak(u)
+            }
     } catch {
       // browser TTS fallback
       clearInterval(waveIntervalRef.current)
