@@ -119,7 +119,7 @@ export default function SituationalScreen({ onBack }) {
     setPhase('chat')
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:5000/api/modes/situation/start', {
+      const res = await fetch('/api/modes/situation/start', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scenario: s })
       })
@@ -138,7 +138,7 @@ export default function SituationalScreen({ onBack }) {
     historyRef.current.push({ role: 'user', content: userText })
     setLoading(true); setTurnCount(p => p + 1)
     try {
-      const res = await fetch('http://localhost:5000/api/modes/situation/respond', {
+      const res = await fetch('/api/modes/situation/respond', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scenario: selected, history: historyRef.current.slice(-6), userMessage: userText })
       })
@@ -154,7 +154,7 @@ export default function SituationalScreen({ onBack }) {
     window.speechSynthesis.cancel(); setLoading(true)
     const transcript = messages.map(m => `${m.role === 'user' ? 'User' : selected.name}: ${m.content}`).join('\n')
     try {
-      const res = await fetch('http://localhost:5000/api/modes/situation/evaluate', {
+      const res = await fetch('/api/modes/situation/evaluate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scenario: selected, transcript })
       })

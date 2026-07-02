@@ -171,7 +171,7 @@ export default function GDScreen({ onBack }) {
     setPhase('gd')
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:5000/api/gd/respond', {
+      const res = await fetch('/api/gd/respond', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -221,7 +221,7 @@ export default function GDScreen({ onBack }) {
     const persona = PERSONAS.find(p => p.key === speakerKey)
 
     try {
-      const res = await fetch('http://localhost:5000/api/gd/respond', {
+      const res = await fetch('/api/gd/respond', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -245,7 +245,7 @@ export default function GDScreen({ onBack }) {
         // small delay so it feels natural
         await new Promise(r => setTimeout(r, 800))
         setLoading(true)
-        const res2 = await fetch('http://localhost:5000/api/gd/chime', {
+        const res2 = await fetch('/api/gd/chime', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -278,7 +278,7 @@ export default function GDScreen({ onBack }) {
     setLoading(true)
     const transcript = messages.map(m => `${m.name}: ${m.content}`).join('\n')
     try {
-      const res = await fetch('http://localhost:5000/api/gd/evaluate', {
+      const res = await fetch('/api/gd/evaluate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic: selectedTopic.label, transcript })

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const API_URL = 'http://localhost:5000/api/chat'
+const API_URL = '/api/chat'
 
 export const useChat = (topic) => {
   const [messages, setMessages] = useState([])

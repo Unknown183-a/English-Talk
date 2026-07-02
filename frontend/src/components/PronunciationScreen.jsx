@@ -100,7 +100,7 @@ export default function PronunciationScreen({ onBack }) {
       setWaveBars(Array.from({ length: 18 }, () => Math.floor(4 + Math.random() * 26)))
     }, 110)
     try {
-      const res = await fetch('http://localhost:5000/api/speak', {
+      const res = await fetch('/api/speak', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })
       })
@@ -158,7 +158,7 @@ export default function PronunciationScreen({ onBack }) {
     if (!text.trim()) return
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:5000/api/pronunciation', {
+      const res = await fetch('/api/pronunciation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

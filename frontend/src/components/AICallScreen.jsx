@@ -81,7 +81,7 @@ export default function AICallScreen({ onBack }) {
     setAiSpeaking(true)
     setAiText(text)
     try {
-      const res = await fetch('http://localhost:5000/api/call/speak', {
+      const res = await fetch('/api/call/speak', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })
       })
@@ -111,7 +111,7 @@ export default function AICallScreen({ onBack }) {
     setCallLog(prev => [...prev, { role: 'user', text: userText }])
 
     try {
-      const res = await fetch('http://localhost:5000/api/call/respond', {
+      const res = await fetch('/api/call/respond', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ persona: selectedPersona.id, history: newHistory, userMessage: userText, level: localStorage.getItem('englishtalk_level') || 'intermediate' })
       })
@@ -168,7 +168,7 @@ export default function AICallScreen({ onBack }) {
     // AI speaks first
     try {
       const activePersona = persona || selectedPersona
-      const res = await fetch('http://localhost:5000/api/call/respond', {
+      const res = await fetch('/api/call/respond', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           persona: activePersona.id, history: [],
@@ -191,7 +191,7 @@ export default function AICallScreen({ onBack }) {
     const transcriptText = callLog.map(l => `${l.role === 'ai' ? selectedPersona.name : 'Student'}: ${l.text}`).join('\n')
 
     try {
-      const res = await fetch('http://localhost:5000/api/call/evaluate', {
+      const res = await fetch('/api/call/evaluate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ persona: selectedPersona.id, transcript: transcriptText })
       })

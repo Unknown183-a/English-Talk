@@ -52,7 +52,7 @@ export default function WordOfDayScreen({ onBack }) {
 
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:5000/api/word/daily', {
+      const res = await fetch('/api/word/daily', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date: today })
@@ -95,7 +95,7 @@ export default function WordOfDayScreen({ onBack }) {
       setWaveBars(Array.from({ length: 18 }, () => Math.floor(4 + Math.random() * 26)))
     }, 110)
     try {
-      const res = await fetch('http://localhost:5000/api/speak', {
+      const res = await fetch('/api/speak', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })
       })
@@ -133,7 +133,7 @@ export default function WordOfDayScreen({ onBack }) {
     if (!userSentence.trim() || !wordData) return
     setQuizLoading(true)
     try {
-      const res = await fetch('http://localhost:5000/api/word/quiz', {
+      const res = await fetch('/api/word/quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

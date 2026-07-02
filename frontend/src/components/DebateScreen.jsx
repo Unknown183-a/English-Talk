@@ -65,7 +65,7 @@ export default function DebateScreen({ onBack }) {
     setLoading(true)
     setTurnCount(p => p + 1)
     try {
-      const res = await fetch('http://localhost:5000/api/modes/debate/respond', {
+      const res = await fetch('/api/modes/debate/respond', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic: selectedTopic.label, userSide, history: historyRef.current.slice(-6), userMessage: userText })
       })
@@ -82,7 +82,7 @@ export default function DebateScreen({ onBack }) {
     setLoading(true)
     const transcript = messages.map(m => `${m.role === 'user' ? 'User' : 'AI'}: ${m.content}`).join('\n')
     try {
-      const res = await fetch('http://localhost:5000/api/modes/debate/evaluate', {
+      const res = await fetch('/api/modes/debate/evaluate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic: selectedTopic.label, userSide, transcript })
       })
