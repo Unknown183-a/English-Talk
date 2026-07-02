@@ -139,7 +139,26 @@ export default function WordOfDayScreen({ onBack }) {
     r.lang = 'en-IN'; r.interimResults = true; r.continuous = false
     recognitionRef.current = r
     r.onstart = () => setListening(true)
-    r.onresult = (e) => setUserSentence(Array.from(e.results).map(r => r[0].transcript).join(''))
+    r.continuous = true
+    r.interimResults = true
+    r.onresult = (e) => {
+      const transcript = Array.from(e.results).map(r => r[0].transcript).join('')
+      setUserSentence(prev => {
+        // Append new speech to existing text
+        const base = prev.trim()
+        return base ? base + ' ' + transcript : transcript
+      })
+    }
+    // Wait 8 seconds of silence before stopping
+    let silenceTimer = null
+    r.onspeechend = () => {
+      silenceTimer = setTimeout(() => {
+        recognitionRef.current?.stop()
+      }, 8000)
+    }
+    r.onspeechstart = () => {
+      if (silenceTimer) clearTimeout(silenceTimer)
+    }
     r.onend = () => setListening(false)
     r.onerror = () => setListening(false)
     r.start()
