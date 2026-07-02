@@ -1,3 +1,4 @@
+import useMic from '../hooks/useMic'
 import { useState, useRef, useEffect } from 'react'
 
 const INTERVIEW_QUESTIONS = [
@@ -106,14 +107,7 @@ export default function VideoInterviewScreen({ onBack }) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SR) { alert('Use Chrome for voice input'); return }
     const r = new SR()
-    r.lang = 'en-IN'; r.interimResults = true; r.continuous = true
-    recognitionRef.current = r
-    r.onstart = () => setListening(true)
-    r.onresult = e => {
-      const transcript = Array.from(e.results).map(r => r[0].transcript).join('')
-      setCurrentAnswer(transcript)
-    }
-    r.onend = () => setListening(false)
+    // mic handled by useMic hook
     r.onerror = () => setListening(false)
     r.start()
   }

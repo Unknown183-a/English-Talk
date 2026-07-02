@@ -1,3 +1,4 @@
+import useMic from '../hooks/useMic'
 import { useState, useEffect, useRef } from 'react'
 
 const PERSONAS = [
@@ -127,11 +128,7 @@ export default function AICallScreen({ onBack }) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SR) { alert('Use Chrome for voice'); return }
     const r = new SR()
-    r.lang = 'en-IN'; r.interimResults = true; r.continuous = false
-    recognitionRef.current = r
-    r.onstart = () => { setListening(true); setUserSpeaking(true) }
-    r.onresult = (e) => setTranscript(Array.from(e.results).map(r => r[0].transcript).join(''))
-    r.onend = async () => {
+    // mic handled by useMic hook
       setListening(false); setUserSpeaking(false)
       if (transcript.trim()) { await getAIResponse(transcript); setTranscript('') }
     }

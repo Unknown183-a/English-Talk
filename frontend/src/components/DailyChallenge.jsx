@@ -1,3 +1,4 @@
+import useMic from '../hooks/useMic'
 import { useState, useEffect, useRef } from 'react'
 import { useChat } from '../hooks/useChat'
 import MessageBubble from './MessageBubble'
@@ -193,11 +194,7 @@ export default function DailyChallenge({ onBack, onComplete }) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SR) { alert('Use Chrome for voice input.'); return }
     const r = new SR()
-    r.lang = 'en-IN'; r.interimResults = true; r.continuous = false
-    recognitionRef.current = r
-    r.onstart = () => setListening(true)
-    r.onresult = (e) => setInput(Array.from(e.results).map(r => r[0].transcript).join(''))
-    r.onend = () => setListening(false)
+    // mic handled by useMic hook
     r.onerror = () => setListening(false)
     r.start()
   }

@@ -1,3 +1,4 @@
+import useMic from '../hooks/useMic'
 import { useState, useRef, useEffect } from 'react'
 
 const BADGES = ['MOST VIEWED', 'TRENDING NOW', 'NEWLY ADDED', 'MOST VIEWED', 'TRENDING NOW']
@@ -166,11 +167,7 @@ export default function SituationalScreen({ onBack }) {
   const startListening = () => {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SR) { alert('Use Chrome'); return }
-    const r = new SR(); r.lang = 'en-IN'; r.interimResults = true; r.continuous = false
-    recognitionRef.current = r
-    r.onstart = () => setListening(true)
-    r.onresult = e => setInput(Array.from(e.results).map(r => r[0].transcript).join(''))
-    r.onend = () => setListening(false); r.onerror = () => setListening(false)
+    const r = new SR(); // mic handled by useMic hook
     r.start()
   }
 

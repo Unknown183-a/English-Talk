@@ -1,3 +1,4 @@
+import useMic from '../hooks/useMic'
 import { useState, useRef, useEffect } from 'react'
 
 const GD_TOPICS = [
@@ -297,11 +298,7 @@ export default function GDScreen({ onBack }) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SR) { alert('Use Chrome'); return }
     const r = new SR()
-    r.lang = 'en-IN'; r.interimResults = true; r.continuous = false
-    recognitionRef.current = r
-    r.onstart = () => setListening(true)
-    r.onresult = e => setInput(Array.from(e.results).map(r => r[0].transcript).join(''))
-    r.onend = () => setListening(false)
+    // mic handled by useMic hook
     r.onerror = () => setListening(false)
     r.start()
   }

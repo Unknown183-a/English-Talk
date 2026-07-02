@@ -1,3 +1,4 @@
+import useMic from '../hooks/useMic'
 import { useState, useRef } from 'react'
 
 const sentences = [
@@ -143,18 +144,7 @@ export default function PronunciationScreen({ onBack }) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SR) { alert('Use Chrome for voice input.'); return }
     const r = new SR()
-    r.lang = 'en-IN'
-    r.interimResults = false
-    r.continuous = false
-    recognitionRef.current = r
-    r.onstart = () => { setListening(true); setSpoken(''); setResult(null) }
-    r.onresult = (e) => {
-      const transcript = e.results[0][0].transcript
-      const confidence = e.results[0][0].confidence
-      confidenceRef.current = confidence || 0.8
-      setSpoken(transcript)
-    }
-    r.onend = () => {
+    // mic handled by useMic hook
       setListening(false)
       if (spoken || recognitionRef.current?._finalTranscript) {
         scoreIt(recognitionRef.current?._finalTranscript || spoken)
