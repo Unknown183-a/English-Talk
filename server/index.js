@@ -12,6 +12,7 @@ import wordRoute from './routes/word.js'
 import gdRoute from './routes/gd.js'
 import modesRoute from './routes/modes.js'
 import callRoute from './routes/call.js'
+import translateRoute from './routes/translate.js'
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -26,6 +27,7 @@ app.use('/api/word', wordRoute)
 app.use('/api/gd', gdRoute)
 app.use('/api/modes', modesRoute)
 app.use('/api/call', callRoute)
+app.use('/api/translate', translateRoute)
 
 // Serve React frontend
 const __filename = fileURLToPath(import.meta.url)

@@ -6,7 +6,7 @@ const DAILY_GOAL = 3
 export default function TopicSelector({
   onSelect, onProfile, onHistory, onProgress,
   onPronunciation, onWord, onGD, onDebate,
-  onSituational, onCall, onVideo
+  onSituational, onCall, onVideo, onTranslator
 }) {
   const [progress, setProgress] = useState(loadProgress())
   const [visible, setVisible] = useState(false)
@@ -45,6 +45,7 @@ export default function TopicSelector({
     { icon: '🧩', label: 'Situational', desc: 'Real life scenarios', color: '#7c3aed', action: onSituational },
     { icon: '🎧', label: 'AI Call', desc: 'Phone interview', color: '#8b5cf6', action: onCall },
     { icon: '🎬', label: 'Video Interview', desc: 'Webcam + AI feedback', color: '#ef4444', action: onVideo },
+    { icon: '🌐', label: 'Live Translator', desc: 'Any language ↔ any language', color: '#6366f1', action: onTranslator },
     { icon: '📈', label: 'My Progress', desc: 'Charts & stats', color: '#8b5cf6', action: onProgress },
   ]
 

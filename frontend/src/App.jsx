@@ -1,3 +1,4 @@
+import LiveTranslator from './components/LiveTranslator'
 import { useState } from 'react'
 import TopicSelector from './components/TopicSelector'
 
@@ -45,6 +46,7 @@ export default function App() {
   if (screen === 'history') return <HistoryScreen onBack={goHome} />
   if (screen === 'progress') return <ProgressScreen onBack={goHome} />
   if (screen === 'pronunciation') return <PronunciationScreen onBack={goHome} />
+  if (screen === 'translator') return <LiveTranslator onBack={() => setScreen('home')} />
   if (screen === 'word') return <WordOfDayScreen onBack={goHome} />
   if (screen === 'gd') return <GDScreen onBack={goHome} />
   if (screen === 'debate') return <DebateScreen onBack={goHome} />
@@ -65,6 +67,7 @@ export default function App() {
       onSituational={() => setScreen('situational')}
       onCall={() => setScreen('call')}
       onVideo={() => setScreen('video')}
+      onTranslator={() => setScreen('translator')}
     />
   )
 }
