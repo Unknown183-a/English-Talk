@@ -144,14 +144,31 @@ export default function PronunciationScreen({ onBack }) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SR) { alert('Use Chrome for voice input.'); return }
     const r = new SR()
-    // mic handled by useMic hook
+    r.lang = 'en-IN'
+    r.continuous = true
+    r.interimResults = true
+    recognitionRef.current = r
+    recognitionRef.current._finalTranscript = ''
+    r.onresult = (e) => {
+      const text = Array.from(e.results).map(r => r[0].transcript).join('')
+      setSpoken(text)
+      recognitionRef.current._finalTranscript = text
+    }
+    let silenceTimer = null
+    r.onspeechend = () => {
+      silenceTimer = setTimeout(() => {
+        r.stop()
+      }, 8000)
+    }
+    r.onspeechstart = () => { if (silenceTimer) clearTimeout(silenceTimer) }
+    r.onend = () => {
       setListening(false)
-      if (spoken || recognitionRef.current?._finalTranscript) {
-        scoreIt(recognitionRef.current?._finalTranscript || spoken)
-      }
+      const final = recognitionRef.current?._finalTranscript || spoken
+      if (final && final.trim()) scoreIt(final)
     }
     r.onerror = () => setListening(false)
     r.start()
+    setListening(true)
   }
 
   const stopAndScore = () => {
