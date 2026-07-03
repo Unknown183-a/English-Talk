@@ -128,10 +128,27 @@ export default function AICallScreen({ onBack }) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SR) { alert('Use Chrome for voice'); return }
     const r = new SR()
-    // mic handled by useMic hook
-      setListening(false); setUserSpeaking(false)
-      if (transcript.trim()) { await getAIResponse(transcript); setTranscript('') }
+    r.lang = 'en-IN'
+    r.continuous = true
+    r.interimResults = true
+    r.onresult = (e) => {
+      const text = Array.from(e.results).map(r => r[0].transcript).join('')
+      setTranscript(text)
     }
+    let silenceTimer = null
+    r.onspeechend = () => {
+      silenceTimer = setTimeout(async () => {
+        r.stop()
+        setListening(false)
+        setUserSpeaking(false)
+        if (transcript.trim()) {
+          await getAIResponse(transcript)
+          setTranscript('')
+        }
+      }, 8000)
+    }
+    r.onspeechstart = () => { if (silenceTimer) clearTimeout(silenceTimer) }
+    r.onend = () => { setListening(false); setUserSpeaking(false) }
     r.onerror = () => { setListening(false); setUserSpeaking(false) }
     r.start()
   }
